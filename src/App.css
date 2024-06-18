@@ -1,0 +1,28 @@
+.weatherItem {
+  background-color: lightblue;
+  margin: 20px;
+}
+
+.fav {
+  background-color: yellow;
+}
+
+.mainCard {
+  margin: 10%;
+  padding: 10px;
+  border: solid 2px grey;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.fav {
+  border: solid 4px gold;
+  /* background-image: url("src/cloud.jpeg"); */
+}
+.content {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
