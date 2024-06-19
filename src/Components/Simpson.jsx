@@ -5,15 +5,16 @@ import Content from "./Content";
 class Simpson extends Component {
   state = { favourite: false };
   onClick = () => {
-    console.log("CLICK");
     this.setState({ favourite: !this.state.favourite });
+    this.props.favourited(this.props.id);
   };
   render() {
-    const { character, characterDirection, image, quote } = this.props.item;
+    const { character, characterDirection, image, quote, favourite } =
+      this.props.item;
 
     return (
       <div
-        className={`mainCard ${this.state.favourite ? "fav" : ""}`}
+        className={`mainCard ${favourite ? "fav" : ""}`}
         onClick={this.onClick}
       >
         <Character name={character} />
