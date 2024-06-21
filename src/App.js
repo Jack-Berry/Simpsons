@@ -8,10 +8,10 @@ class App extends Component {
   state = { inputText: "" };
 
   componentDidMount() {
-    this.getSimpsons();
+    this.getData();
   }
 
-  getSimpsons = async () => {
+  getData = async () => {
     const { data } = await axios.get(
       `https://thesimpsonsquoteapi.glitch.me/quotes?count=50`
     );
@@ -22,19 +22,33 @@ class App extends Component {
   };
 
   favourited = (id) => {
-    // this.setState({ totalFavourites: this.state.totalFavourites + 1 });
-    const simpsonsCopy = [...this.state.simpsons];
+    const dataCopy = [...this.state.simpsons];
 
-    const which = simpsonsCopy.findIndex((item) => {
+    const which = dataCopy.findIndex((item) => {
       return item.id === id;
     });
-    simpsonsCopy[which + 1].favourite = !simpsonsCopy[which + 1].favourite;
-    this.setState({ simpsons: simpsonsCopy });
+    dataCopy[which + 1].favourite = !dataCopy[which + 1].favourite;
+    this.setState({ simpsons: dataCopy });
   };
 
   onInput = (text) => {
-    this.setState(text);
+    this.setState({ inputText: text });
   };
+  filterResults() {
+    let filtered = [...this.state.simpsons];
+    if (this.state.inputText) {
+      filtered = filtered.filter((item) => {
+        return item.character
+          .toLowerCase()
+          .includes(this.state.inputText.toLocaleLowerCase());
+      });
+    }
+    console.log(filtered);
+
+    filtered = filtered.length ? filtered : this.state.simpsons;
+
+    return filtered;
+  }
 
   render() {
     const { simpsons } = this.state;
@@ -42,13 +56,6 @@ class App extends Component {
     if (!simpsons) {
       return <p>Loading...</p>;
     }
-    // const simps = { ...this.state.simpsons };
-    // const filteredSimps = Object.values(simps).filter((item) => {
-    //   if (item.character === this.state.inputText) {
-    //     return true;
-    //   }
-    // });
-    // console.log(filteredSimps, this.state.inputText, simps);
 
     const totalFavourites = this.state.simpsons.filter((item) => {
       return item.favourite === true;
@@ -57,7 +64,10 @@ class App extends Component {
       <>
         <h1>Total Favourited: {totalFavourites.length}</h1>
         <Search onInput={this.onInput} />
-        <Simpsons simpsons={simpsons} favourited={this.favourited} />
+        <Simpsons
+          simpsons={this.filterResults()}
+          favourited={this.favourited}
+        />
       </>
     );
   }

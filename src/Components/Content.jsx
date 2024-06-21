@@ -3,7 +3,6 @@ import Quote from "./Quote";
 import Image from "./Image";
 
 class Content extends Component {
-  state = {};
   render() {
     const { direction, image, quote } = this.props;
     if (direction === "Right") {
