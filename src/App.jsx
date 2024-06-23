@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./App.css";
 import Simpsons from "./Components/Simpsons";
 import Search from "./Components/Search";
 
 const App = () => {
   const [data, getData] = useState();
   const [inputText, setInputText] = useState("");
-  const totalFavourites = 0;
+  const [totalFavourites, getFavs] = useState([]);
 
   const getApiData = async () => {
     const { data } = await axios.get(
@@ -14,45 +15,58 @@ const App = () => {
     );
     data.forEach((e, index) => {
       e.id = index + 1;
+      e.favourite = false;
     });
     getData(data);
   };
   useEffect(() => {
     getApiData();
   }, []); // Only runs once
+  if (!data) {
+    return <p>Loading...</p>;
+  }
 
   const onInput = (text) => {
-    setInputText({ inputText: text });
+    setInputText(text);
+    console.log(inputText);
   };
 
   const favourited = (id) => {
     const dataCopy = [...data];
-    console.log(Array.isArray(dataCopy), "FAV");
+
     const which = dataCopy.findIndex((item) => {
       return item.id === id;
     });
-    dataCopy[which + 1].favourite = !dataCopy[which + 1].favourite;
-    getData({ data: dataCopy });
+    console.log(which, "FAV");
+    dataCopy[which].favourite = !dataCopy[which].favourite;
+    console.log(dataCopy[which], "FAV");
+    getData(dataCopy);
+    updateFavs();
   };
 
-  if (!data) {
-    return <p>Loading...</p>;
-  }
   const filterResults = () => {
     let filtered = [...data];
+    if (inputText) {
+      filtered = filtered.filter((item) => {
+        return item.character
+          .toLowerCase()
+          .includes(inputText.toLocaleLowerCase());
+      });
+    }
 
-    // if (inputText) {
-    //   filtered = filtered.filter((item) => {
-    //     return item.character
-    //       .toLowerCase()
-    //       .includes(inputText.toLocaleLowerCase());
-    //   });
-    // }
-    // console.log(filtered, "filtered");
-
-    // filtered = filtered.length ? filtered : data;
-    console.log(Array.isArray(data), "source");
+    filtered = filtered.length ? filtered : data;
+    console.log(filtered);
     return filtered;
+  };
+
+  const updateFavs = () => {
+    const dataCopy = [...data];
+
+    const newFavourites = dataCopy.filter((item) => {
+      return item.favourite === true;
+    });
+    getFavs(newFavourites);
+    console.log(newFavourites);
   };
 
   return (

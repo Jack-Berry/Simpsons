@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Character from "./Character";
 import Content from "./Content";
 
 function Simpson({ data, favourited, id }) {
-  const { character, characterDirection, image, quote, favourite } = data;
-  const onClick = (e) => {
+  let [_favourite, getFavourite] = useState(false);
+  const { character, characterDirection, image, quote } = data;
+  const onClick = () => {
+    getFavourite((_favourite = !_favourite));
     favourited(id);
   };
 
   return (
-    <div className={`mainCard ${favourite ? "fav" : ""}`} onClick={onClick}>
+    <div className={`mainCard ${_favourite ? "fav" : ""}`} onClick={onClick}>
       <Character name={character} />
       <Content image={image} direction={characterDirection} quote={quote} />
     </div>

@@ -1,29 +1,28 @@
-import React, { Component } from "react";
+import React, { useRef, useEffect } from "react";
 
-class Search extends Component {
-  inputRef = React.createRef();
-
-  localInput = (e) => {
-    this.props.onInput(e.target.value);
+function Search({ onInput }) {
+  const inputRef = useRef(null);
+  const localInput = (e) => {
+    onInput(e.target.value);
   };
-  componentDidMount() {
-    if (this.inputRef.current) {
-      this.inputRef.current.focus();
+  console.log(inputRef, "REF");
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
-  }
-  render() {
-    return (
-      <>
-        <input
-          type="text"
-          className="searchBox"
-          placeholder="Search here..."
-          ref={this.inputRef}
-          onInput={this.localInput}
-        />
-      </>
-    );
-  }
+  }, []); // Only runs once
+
+  return (
+    <>
+      <input
+        type="text"
+        className="searchBox"
+        placeholder="Search here..."
+        ref={inputRef}
+        onInput={localInput}
+      />
+    </>
+  );
 }
 
 export default Search;
