@@ -1,19 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import Simpson from "./Simpson";
 
-class Simpsons extends Component {
-  render() {
-    return this.props.simpsons.map((item, id) => {
-      return (
-        <Simpson
-          key={id}
-          id={id}
-          item={item}
-          favourited={this.props.favourited}
-        />
-      );
-    });
-  }
+function Simpsons({ data, favourited }) {
+  return data.map((data) => {
+    let idKey = data.id;
+    return (
+      <Simpson key={idKey} id={idKey} data={data} favourited={favourited} />
+    );
+  });
 }
 
 export default Simpsons;
