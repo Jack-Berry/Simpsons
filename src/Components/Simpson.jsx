@@ -7,13 +7,22 @@ function Simpson({ data, favourited, id }) {
   const { character, characterDirection, image, quote } = data;
   const onClick = () => {
     getFavourite((_favourite = !_favourite));
-    favourited(id);
+    favourited.favourited(id, "fav");
+  };
+  const deleted = () => {
+    favourited.favourited(id, "delete");
+    console.log("DELETED Activated");
   };
 
   return (
-    <div className={`mainCard ${_favourite ? "fav" : ""}`} onClick={onClick}>
-      <Character name={character} />
-      <Content image={image} direction={characterDirection} quote={quote} />
+    <div className="container">
+      <button className="delete" onClick={deleted}>
+        X
+      </button>
+      <div className={`mainCard ${_favourite ? "fav" : ""}`} onClick={onClick}>
+        <Character name={character} />
+        <Content image={image} direction={characterDirection} quote={quote} />
+      </div>
     </div>
   );
 }
